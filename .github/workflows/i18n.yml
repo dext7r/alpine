@@ -17,14 +17,9 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - run: corepack enable
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v3
               with:
-                  node-version: 18
-                  cache: "pnpm"
-            - uses: denoland/setup-deno@v2
-              with:
-                  deno-version: v2.x
+                  node-version: "18"
 
             - run: npx ai-markdown-translator -i ./packages/docs/src/en -o ./packages/docs/src/zh -e md -l chinese --log --retry-count 5 --retry-delay 15
 
