@@ -20,13 +20,13 @@ jobs:
             - run: corepack enable
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 18
                   cache: "pnpm"
             - uses: denoland/setup-deno@v2
               with:
                   deno-version: v2.x
 
-            - run: npx ai-markdown-translator -i ./packages/docs/src/en -o ./packages/docs/src/zh -e md -l chinese
+            - run: npx ai-markdown-translator -i ./packages/docs/src/en -o ./packages/docs/src/zh -e md -l chinese --log --retry-count 5 --retry-delay 15
 
             - name: Commit and push changes if any
               run: |
