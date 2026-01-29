@@ -506,3 +506,139 @@ test(
     }
 );
 
+test('x-model.change only updates on change event',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.change="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').blur()
+        get('span').should(haveText('bar'))
+    }
+)
+
+test('x-model.blur only updates on blur event',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.blur="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').blur()
+        get('span').should(haveText('bar'))
+    }
+)
+
+test('x-model.enter only updates on enter keypress',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.enter="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').type('{enter}')
+        get('span').should(haveText('bar'))
+    }
+)
+
+test('x-model.change.blur updates on both change and blur',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.change.blur="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').blur()
+        get('span').should(haveText('bar'))
+    }
+)
+
+test('x-model.change.blur.enter updates on any of the three events',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.change.blur.enter="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        // Test enter
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').type('{enter}')
+        get('span').should(haveText('bar'))
+        // Clear and test blur
+        get('input').clear()
+        get('input').type('baz')
+        get('input').blur()
+        get('span').should(haveText('baz'))
+    }
+)
+
+test('x-model.lazy still works as alias for change',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.lazy="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').blur()
+        get('span').should(haveText('bar'))
+    }
+)
+
+test('x-model.blur.enter updates on blur OR enter (enter should work)',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.blur.enter="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        // Test enter specifically - this was broken when blur modifier was also present
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').type('{enter}')
+        get('span').should(haveText('bar'))
+    }
+)
+
+test('x-model.enter.blur updates on enter OR blur (enter should work)',
+    html`
+    <div x-data="{ foo: '' }">
+        <input x-model.enter.blur="foo">
+        <span x-text="foo"></span>
+    </div>
+    `,
+    ({ get }) => {
+        // Test enter specifically with modifiers in different order
+        get('span').should(haveText(''))
+        get('input').type('bar')
+        get('span').should(haveText(''))
+        get('input').type('{enter}')
+        get('span').should(haveText('bar'))
+    }
+)
+

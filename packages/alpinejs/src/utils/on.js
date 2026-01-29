@@ -113,7 +113,9 @@ function isClickEvent(event) {
 
 function isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers) {
     let keyModifiers = modifiers.filter(i => {
-        return ! ['window', 'document', 'prevent', 'stop', 'once', 'capture', 'self', 'away', 'outside', 'passive'].includes(i)
+        // `preserve-scroll` is specifically for Livewire and is not used by Alpine...
+        // `blur`, `change`, `enter`, `lazy` are x-model event trigger modifiers, not key modifiers
+        return ! ['window', 'document', 'prevent', 'stop', 'once', 'capture', 'self', 'away', 'outside', 'passive', 'preserve-scroll', 'blur', 'change', 'lazy'].includes(i)
     })
 
     if (keyModifiers.includes('debounce')) {
